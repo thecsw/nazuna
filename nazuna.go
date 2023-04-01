@@ -1,27 +1,41 @@
 package nazuna
 
-import "strings"
-
-// StringEmpty returns true if the string is empty.
-func StringEmpty(s string) bool { return len(s) < 1 }
-
-// StringNotEmpty returns true if the string is not empty.
-func StringNotEmpty(s string) bool { return len(s) > 0 }
-
-// StringContains returns a function that returns true if the
-// string contains the substring.
-func StringContains(substr string) func(string) bool {
-	return func(s string) bool { return strings.Contains(s, substr) }
-}
-
-// SliceEmpty returns true if the slice is empty.
-func SliceEmpty[T any](arr []T) bool { return len(arr) < 1 }
-
-// SliceNotEmpty returns true if the slice is not empty.
-func SliceNotEmpty[T any](arr []T) bool { return len(arr) > 0 }
+import (
+	"golang.org/x/exp/constraints"
+)
 
 // Nil returns true if the value is nil.
 func Nil(v any) bool { return v == nil }
 
 // NotNil returns true if the value is not nil.
 func NotNil(v any) bool { return v != nil }
+
+// IsGreater returns a function that returns true if the
+// value is greater than the anchor value.
+func IsGreater[T constraints.Ordered](anchor T) func(T) bool {
+	return func(i T) bool { return i > anchor }
+}
+
+// IsGreaterEqual returns a function that returns true if the
+// value is greater than or equal to the anchor value.
+func IsGreaterEqual[T constraints.Ordered](anchor T) func(T) bool {
+	return func(i T) bool { return i >= anchor }
+}
+
+// IsEqual returns a function that returns true if the
+// value is equal to the anchor value.
+func IsEqual[T comparable](anchor T) func(T) bool {
+	return func(i T) bool { return i == anchor }
+}
+
+// IsLess returns a function that returns true if the
+// value is less than the anchor value.
+func IsLess[T constraints.Ordered](anchor T) func(T) bool {
+	return func(i T) bool { return i < anchor }
+}
+
+// IsLessEqual returns a function that returns true if the
+// value is less than or equal to the anchor value.
+func IsLessEqual[T constraints.Ordered](anchor T) func(T) bool {
+	return func(i T) bool { return i <= anchor }
+}
